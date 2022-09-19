@@ -1,7 +1,7 @@
 import BookShelf from "./BookShelf";
 const Shelves = ({ books, moveBook }) => {
-  const currentlyReading = books.filter((b) => b.shelf === "currently-reading");
-  const wantToRead = books.filter((b) => b.shelf === "want-to-read");
+  const currentlyReading = books.filter((b) => b.shelf === "currentlyReading");
+  const wantToRead = books.filter((b) => b.shelf === "wantToRead");
   const read = books.filter((b) => b.shelf === "read");
 
   return (
