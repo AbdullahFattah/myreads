@@ -1,5 +1,5 @@
 import Book from "./Book";
-const BookShelf = ({ books, title }) => {
+const BookShelf = ({ books, title, moveBook }) => {
   return (
     <div className="bookshelf">
       <h2 className="bookshelf-title">{title}</h2>
@@ -7,7 +7,7 @@ const BookShelf = ({ books, title }) => {
         <ol className="books-grid">
           {books.map((b) => (
             <li>
-              <Book book={b} />
+              <Book book={b} moveBook={moveBook} />
             </li>
           ))}
         </ol>

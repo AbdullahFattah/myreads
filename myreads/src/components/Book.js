@@ -1,4 +1,4 @@
-const Book = ({ book }) => {
+const Book = ({ book, moveBook }) => {
   return (
     <li>
       <div className="book">
@@ -12,12 +12,15 @@ const Book = ({ book }) => {
             }}
           ></div>
           <div className="book-shelf-changer">
-            <select>
+            <select
+              defaultValue={book.shelf}
+              onChange={(e) => moveBook(book, e.target.value)}
+            >
               <option value="none" disabled>
                 Move to...
               </option>
-              <option value="currentlyReading">Currently Reading</option>
-              <option value="wantToRead">Want to Read</option>
+              <option value="currently-reading">Currently Reading</option>
+              <option value="want-to-read">Want to Read</option>
               <option value="read">Read</option>
               <option value="none">None</option>
             </select>

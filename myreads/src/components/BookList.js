@@ -3,10 +3,9 @@ import Navbar from "./Navbar";
 import Shelves from "./Shelves";
 
 function BookList() {
-  const [showSearchPage, setShowSearchpage] = useState(false);
-
-  let books = [
+  const booksArray = [
     {
+      id: 1,
       title: "To Kill a Mockingbird",
       author: "Harper Lee",
       artwork:
@@ -14,6 +13,7 @@ function BookList() {
       shelf: "currently-reading",
     },
     {
+      id: 2,
       title: "Ender's game",
       author: "Orson Scott Card",
       artwork:
@@ -21,6 +21,7 @@ function BookList() {
       shelf: "currently-reading",
     },
     {
+      id: 3,
       title: "1776",
       author: "David McCullough",
       artwork:
@@ -28,6 +29,7 @@ function BookList() {
       shelf: "want-to-read",
     },
     {
+      id: 4,
       title: "Harry Potter and the Sorcerer's Stone",
       author: "J.K. Rowling",
       artwork:
@@ -35,6 +37,7 @@ function BookList() {
       shelf: "want-to-read",
     },
     {
+      id: 5,
       title: "The Hobbit",
       author: "J.R.R. Tolkien",
       artwork:
@@ -42,6 +45,7 @@ function BookList() {
       shelf: "read",
     },
     {
+      id: 6,
       title: "Oh, the Places You'll Go!",
       author: "Suess",
       artwork:
@@ -49,6 +53,7 @@ function BookList() {
       shelf: "read",
     },
     {
+      id: 7,
       title: "The Adventures of Tom Sawyer",
       author: "Mark Twain",
       artwork:
@@ -56,6 +61,20 @@ function BookList() {
       shelf: "read",
     },
   ];
+  const [showSearchPage, setShowSearchpage] = useState(false);
+
+  const [books, setBooks] = useState(booksArray);
+
+  const moveBook = (book, targetShelf) => {
+    const returnedBook = books.map((b) => {
+      if (b.id === book.id) {
+        book.shelf = targetShelf;
+        return book;
+      }
+      return b;
+    });
+    setBooks(returnedBook);
+  };
   return (
     <div className="app">
       {showSearchPage ? (
@@ -82,7 +101,7 @@ function BookList() {
         <div className="list-books">
           <Navbar />
           <div className="list-books-content">
-            <Shelves books={books} />
+            <Shelves books={books} moveBook={moveBook} />
           </div>
           <div className="open-search">
             <a onClick={() => setShowSearchpage(!showSearchPage)}>Add a book</a>
