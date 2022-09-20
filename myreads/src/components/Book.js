@@ -11,7 +11,17 @@ const Book = ({ book, moveBook }) => {
               backgroundImage: `url(${book.imageLinks.thumbnail})`,
             }}
           ></div>
-          <div className="book-shelf-changer">
+          <div
+            className={
+              book.shelf === "currentlyReading"
+                ? "book-shelf-changer-cr"
+                : book.shelf === "wantToRead"
+                ? "book-shelf-changer-wtr"
+                : book.shelf === "read"
+                ? "book-shelf-changer-r"
+                : ""
+            }
+          >
             <select
               defaultValue={book.shelf}
               onChange={(e) => moveBook(book, e.target.value)}
