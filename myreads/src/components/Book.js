@@ -19,14 +19,14 @@ const Book = ({ book, moveBook }) => {
                 ? "book-shelf-changer-wtr"
                 : book.shelf === "read"
                 ? "book-shelf-changer-r"
-                : ""
+                : "book-shelf-changer-none"
             }
           >
             <select
-              defaultValue={book.shelf}
+              defaultValue={book.shelf ? book.shelf : "none"}
               onChange={(e) => moveBook(book, e.target.value)}
             >
-              <option value="none" disabled>
+              <option value="move" disabled>
                 Move to...
               </option>
               <option value="currentlyReading">Currently Reading</option>

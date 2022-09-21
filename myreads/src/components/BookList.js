@@ -1,16 +1,65 @@
 import { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import Shelves from "./Shelves";
+import { Link } from "react-router-dom";
+import Book from "./Book";
 import * as API from "../BooksAPI";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function BookList() {
+  const [books, setBooks] = useState([]);
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const [searchResults, setSearchResults] = useState([]);
+
+  const [booksFromSearch, setBooksFromSearch] = useState([]);
+
+  const [mappedBookIds, setMappedBookIds] = useState(new Map());
+
   useEffect(() => {
-    API.getAll().then((data) => setBooks(data));
+    API.getAll().then((data) => {
+      setBooks(data);
+      setMappedBookIds(mappedBooks(data));
+    });
   }, []);
 
-  const [showSearchPage, setShowSearchpage] = useState(false);
+  useEffect(() => {
+    let isActive = true;
+    if (searchQuery) {
+      API.search(searchQuery).then((data) => {
+        if (data.error) {
+          console.log("Search error");
+        } else {
+          if (isActive) {
+            setSearchResults(data);
+          }
+        }
+      });
+    }
 
-  const [books, setBooks] = useState([]);
+    return () => {
+      isActive = false;
+      setSearchResults([]);
+    };
+  }, [searchQuery]);
+
+  useEffect(() => {
+    const booksReturnedFromSearch = searchResults.map((result) => {
+      if (mappedBookIds.has(result.id)) {
+        return mappedBookIds.get(result.id);
+      } else {
+        return result;
+      }
+    });
+    setBooksFromSearch(booksReturnedFromSearch);
+  }, [searchResults]);
+
+  const mappedBooks = (books) => {
+    const map = new Map();
+    books.map((book) => map.set(book.id, book));
+    return map;
+  };
 
   const moveBook = (book, targetShelf) => {
     const returnedBook = books.map((b) => {
@@ -26,37 +75,15 @@ function BookList() {
   };
   return (
     <div className="app">
-      {showSearchPage ? (
-        <div className="search-books">
-          <div className="search-books-bar">
-            <a
-              className="close-search"
-              onClick={() => setShowSearchpage(!showSearchPage)}
-            >
-              Close
-            </a>
-            <div className="search-books-input-wrapper">
-              <input
-                type="text"
-                placeholder="Search by title, author, or ISBN"
-              />
-            </div>
-          </div>
-          <div className="search-books-results">
-            <ol className="books-grid"></ol>
-          </div>
+      <div className="list-books">
+        <Navbar />
+        <div className="list-books-content">
+          <Shelves books={books} moveBook={moveBook} />
         </div>
-      ) : (
-        <div className="list-books">
-          <Navbar />
-          <div className="list-books-content">
-            <Shelves books={books} moveBook={moveBook} />
-          </div>
-          <div className="open-search">
-            <a onClick={() => setShowSearchpage(!showSearchPage)}>Add a book</a>
-          </div>
+        <div className="open-search">
+          <Link to="search">Add a book</Link>
         </div>
-      )}
+      </div>
     </div>
   );
 }
